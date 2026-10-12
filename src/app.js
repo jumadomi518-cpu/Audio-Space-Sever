@@ -7,6 +7,8 @@
  const wss = new WebSocketServer({ server });
  const cors = require("cors");
  const { randomUUID } = require("crypto");
+ const { startMediasoup } = require("./services/mediasoup.js");
+
 
  app.use(cors());
  app.use(express.json());
@@ -30,4 +32,13 @@
 
 
 
- server.listen(3000, () => console.log("Server listening on port 3000"))
+startMediasoup()
+  .then(() => {
+    server.listen(3000, "0.0.0.0", () => {
+      console.log("Server listening on port 3000");
+    });
+  })
+  .catch((error) => {
+    console.error("Mediasoup failed:", error);
+    process.exit(1);
+  });
