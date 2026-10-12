@@ -1,0 +1,15 @@
+{
+  "name": "audio-space-backend",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "ws": "^8.18.0",
+    "mediasoup": "^3.15.7"
+  }
+}

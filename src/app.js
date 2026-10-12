@@ -16,6 +16,9 @@
  const roomRouter = require("./routes/roomRouter.js");
  const realTime = require("./services/realTime.js");
 
+ app.get("/", (req, res) => {
+  res.json({ status: "ok", message: "Audio Spaces server is running" });
+ });
 
  app.use("/create-room", createRoomRouter);
  app.use("/join-room", joinRoomRouter);
