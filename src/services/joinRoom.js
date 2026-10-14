@@ -18,7 +18,10 @@
     id: participantId,
     isHost: data?.isHost,
     microphone: "muted",
-    hand: "lowered"
+    hand: "lowered",
+    transports: new Map(),
+    producers: new Map(),
+    consumers: new Map()
   }
 
   const existingParticipant = [...room.participants.values()]
@@ -35,7 +38,8 @@
 
    return {
     successful: true,
-    participantId: participantId
+    participantId: participantId,
+    rtpCapabilities: room.router.rtpCapabilities
    };
  }
 

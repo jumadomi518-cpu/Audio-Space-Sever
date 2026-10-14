@@ -11,6 +11,7 @@ async function startMediasoup() {
 }
 
 module.exports = {
-  startMediasoup
+  worker,
+  startMediasoup,
 };
 

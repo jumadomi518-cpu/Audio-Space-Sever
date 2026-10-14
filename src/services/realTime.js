@@ -1,8 +1,12 @@
 
  const rooms = require("../models/rooms.js");
  const connections = require("../models/connections.js");
+ const createWebRtcTransport = require("./createWebRtcTransport.js");
+ const connectTransport = require("./connectTransport.js");
+ const produce = require("./produce.js");
+ const resumeConsumer = require("./resumeConsumer.js");
 
- function realTime(ws) {
+async function realTime(ws) {
    ws.on("message", (message) => {
     const data = JSON.parse(message);
 
@@ -23,6 +27,88 @@
 
 
       }
+
+ if (data.type === "createWebRtcTransport") {
+  try {
+    const result = await createWebRtcTransport(data);
+
+    ws.send(JSON.stringify({
+      type: "webRtcTransportCreated",
+      ...result
+    }));
+  } catch (error) {
+    ws.send(JSON.stringify({
+      type: "error",
+      message: error.message
+    }));
+  }
+}
+
+if (data.type === "connectTransport") {
+  try {
+    const result = await connectTransport(data);
+
+    ws.send(JSON.stringify({
+      type: "transportConnected",
+      ...result
+    }));
+  } catch (error) {
+    ws.send(JSON.stringify({
+      type: "error",
+      message: error.message
+    }));
+  }
+}
+
+
+if (data.type === "produce") {
+  try {
+    const result = await produce(data);
+
+    ws.send(JSON.stringify({
+      type: "producerCreated",
+      ...result
+    }));
+  } catch (error) {
+    ws.send(JSON.stringify({
+      type: "error",
+      message: error.message
+    }));
+  }
+}
+
+
+if (data.type === "consume") {
+  try {
+    const result = await consume(data);
+
+    ws.send(JSON.stringify({
+      type: "consumerCreated",
+      ...result
+    }));
+  } catch (error) {
+    ws.send(JSON.stringify({
+      type: "error",
+      message: error.message
+    }));
+  }
+}
+
+if (data.type === "resumeConsumer") {
+  try {
+    const result = await resumeConsumer(data);
+
+    ws.send(JSON.stringify({
+      type: "consumerResumed",
+      ...result
+    }));
+  } catch (error) {
+    ws.send(JSON.stringify({
+      type: "error",
+      message: error.message
+    }));
+  }
+}
 
     if (data.type === "microphone") {
       if (participant) {
