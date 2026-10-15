@@ -26,10 +26,14 @@ async function createWebRtcTransport(data) {
     ]
   });
 
-  participant.transports.set(transport.id, transport);
+  participant.transports.set(transport.id, {
+    transport,
+    direction: data.direction
+  });
 
   return {
     id: transport.id,
+    direction: data.direction,
     iceParameters: transport.iceParameters,
     iceCandidates: transport.iceCandidates,
     dtlsParameters: transport.dtlsParameters

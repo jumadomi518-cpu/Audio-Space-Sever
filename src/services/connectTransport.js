@@ -16,9 +16,17 @@ async function connectTransport(data) {
     throw new Error("Participant not found");
   }
 
-  const transport = participant.transports.get(
-    data.transportId
-  );
+
+   const transportEntry = participant.transports.get(
+     data.transportId
+   );
+
+if (!transportEntry) {
+  throw new Error("Transport not found");
+}
+
+const transport = transportEntry.transport;
+
 
   if (!transport) {
     throw new Error("Transport not found");

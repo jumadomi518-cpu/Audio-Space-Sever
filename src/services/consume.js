@@ -22,9 +22,15 @@ async function consume(data) {
     };
   }
 
-  const transport = participant.transports.get(
-    data?.transportId
-  );
+const transportEntry = participant.transports.get(
+  data.transportId
+);
+
+if (!transportEntry) {
+  throw new Error("Transport not found");
+}
+
+const transport = transportEntry.transport;
 
   if (!transport) {
     return {

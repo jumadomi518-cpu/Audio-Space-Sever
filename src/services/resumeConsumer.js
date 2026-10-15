@@ -34,19 +34,44 @@ async function resumeConsumer(data) {
   }
 
   try {
-    await consumer.resume();
+  console.log("Before resume:", {
+    consumerId: consumer.id,
+    paused: consumer.paused
+  });
 
-    return {
-      successful: true,
-      consumerId: consumer.id,
-      message: "Consumer resumed successfully"
-    };
+  await consumer.resume();
+
+  setTimeout(async () => {
+  try {
+    const stats = await consumer.getStats();
+
+    console.log("CONSUMER RTP STATS:", stats);
   } catch (error) {
-    return {
-      successful: false,
-      message: error.message
-    };
+    console.error("Consumer stats failed:", error);
   }
+}, 5000);
+
+
+
+  console.log("After resume:", {
+    consumerId: consumer.id,
+    paused: consumer.paused
+  });
+
+  return {
+    successful: true,
+    consumerId: consumer.id,
+    paused: consumer.paused,
+    message: "Consumer resumed successfully"
+  };
+} catch (error) {
+  console.error("Resume failed:", error);
+
+  return {
+    successful: false,
+    message: error.message
+  };
+}
 }
 
 module.exports = resumeConsumer;

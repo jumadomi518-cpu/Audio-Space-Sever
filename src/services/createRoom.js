@@ -1,7 +1,8 @@
 
  const { randomUUID } = require("crypto");
  const rooms = require("../models/rooms.js");
- const { worker } = require("./mediasoup.js");
+ const { getWorker } = require("./mediasoup.js");
+
  const mediaCodecs = [
   {
     kind: 'audio',
@@ -15,6 +16,7 @@
 
  async function createRoom() {
   const roomId = randomUUID();
+  const worker = getWorker();
   const router = await worker.createRouter({
     mediaCodecs
   });

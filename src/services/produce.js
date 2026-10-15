@@ -16,9 +16,18 @@ async function produce(data) {
     return { successful: false, message: "Participant not found" };
   }
 
-  const transport = participant.transports.get(
-    data?.transportId
-  );
+
+
+const transportEntry = participant.transports.get(
+  data.transportId
+);
+
+if (!transportEntry) {
+  throw new Error("Transport not found");
+}
+
+const transport = transportEntry.transport;
+
 
   if (!transport) {
     return { successful: false, message: "Transport not found" };
@@ -31,6 +40,30 @@ async function produce(data) {
     });
 
     participant.producers.set(producer.id, producer);
+
+console.log("PRODUCER CREATED:", {
+  id: producer.id,
+  kind: producer.kind,
+  type: producer.type,
+  paused: producer.paused,
+  closed: producer.closed,
+  appData: producer.appData
+});
+
+console.log("PRODUCER RTP PARAMETERS:", producer.rtpParameters);
+
+   setTimeout(async () => {
+  try {
+    const stats = await producer.getStats();
+
+    console.log("PRODUCER STATS COUNT:", stats.length);
+    console.dir(stats, { depth: null });
+  } catch (error) {
+    console.error("PRODUCER STATS ERROR:", error);
+  }
+}, 5000);
+
+
 
     producer.on("transportclose", () => {
       participant.producers.delete(producer.id);

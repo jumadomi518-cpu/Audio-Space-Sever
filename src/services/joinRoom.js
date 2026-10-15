@@ -9,7 +9,7 @@
   const room = rooms.get(data?.roomId);
 
   if (!room) {
-   return { successful: false }
+   return { successful: false, message: "Room id not found" }
   }
 
 

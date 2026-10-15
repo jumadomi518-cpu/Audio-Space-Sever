@@ -2,12 +2,13 @@
  const createRoom = require("../services/createRoom.js");
 
 
- function createRoomController(req, res) {
-  const roomId = createRoom();
+ async function createRoomController(req, res) {
+  const roomId = await createRoom();
 
  if (!roomId) {
   res.json({
    successful: false,
+   message: "Room id creation failed"
   });
   return;
 }
